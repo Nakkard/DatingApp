@@ -51,8 +51,8 @@ namespace API.Controllers
             var user = await _context.Users
                 .FirstOrDefaultAsync(x => x.UserName == loginDto.UserName, cancellationToken);
 
-            if (user == null) 
-                return Unauthorized("invalid username");
+            if (user is null) 
+                return Unauthorized("Invalid username!");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
 
@@ -61,7 +61,7 @@ namespace API.Controllers
             for (int i = 0; i < computedHash.Length; i++)
             {
                 if (computedHash[i] != user.PasswordHash[i])
-                    return Unauthorized("invalid password");
+                    return Unauthorized("Invalid password!");
             }
 
             return new UserDto
